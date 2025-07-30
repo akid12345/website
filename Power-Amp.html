@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Updates</title>
+		<title>Power Amplifier</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -45,13 +45,14 @@
 							<div class="inner">
 								<h2>Power Amplifier</h2>
                                 <p>Power Amplifier for built-in speakers</p>
+								<p>Summer 2022</p>
 						</header>
 
 						<!-- Content -->
 							<div class="wrapper">
 								<div class="inner">
 									<h3 class="major">Power Amplifier</h3>
-									<p>Today, almost everyone has a smart TV, with many also having a speaker system built into their . I wanted to connect my TV to the speaker system without having to spend a ton of money, or buy something big and ugly. </p>
+									<p>Today, almost everyone has a TV and a sound system to output sound to create sound from all around the viewer. The main purpose of this project was to connect my TV to the speaker system without having to spend a ton of money, or buy something big and ugly. </p>
 									<div style="display: flex; justify-content: center; align-items: center;">
 										<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
 											<img src="images/Power-Amp/TV.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="TV Diagram" />
@@ -60,11 +61,23 @@
 											<img src="images/Power-Amp/Diagram1.png" style="width: 90%; height: auto; max-width: 100%;" alt="Digital Diagram" />
 										</div>
 									</div>
-                                    <p>I searched online for a device which can decode Digital Audio output from TV through Optical Toslink into 5.1 analog signals, and amplify these 6 channels so that the signals are strong enough to drive the passive speakers. However, that kind of device doesn’t exist. I found a Digital to 5.1 CH converter in Amazon:</p>
+									<p></p>
+                                    <p>I tried searching online for a device that can decode Digital Audio output from TV through Optical Toslink into 5.1 analog signals, and amplify these 6 channels so that the signals are strong enough to drive the passive speakers; however, that kind of device did not exist. So instead I found a Digital to 5.1 CH converter in Amazon:</p>
                                     <a href="#" class="image"><img src="images/Power-Amp/Amazon.png" alt="" width="500" height="400"/></a>
                                     <p>I built my design based off the following datasheet:</p>
+									<p>The principle behind an audio amplifier is to increase the input signal (power) so that it can drive a larger output load, which in this case is a speaker. Simplified down, an amplifier uses components like transistors or operational amplifiers to manipulate a large amoung of energy from a power supply from the inputs of a small signal</p>
+									<p>The amplifier works by taking in an input voltage, and outputing it to one input of a differential amplifier. The output of said amplifier is then scaled to a version of the original signal, determined by the gain set my external resistors, and is used to drive a load that requires more current and volatge than what the initial input signal can provide alone.</p>
                                     <a href="#" class="image"><img src="images/Power-Amp/datasheet.png" alt="" width="500" height="300"/></a>
                                     <p>Components: </p>
+									<ul>
+										<li>Film capacitors</li>
+										<li>2-Pin terminal blocks</li>
+										<li>Tantalum capacitors</li>
+										<li>Audio amplifier ICs (intergrated circuits)</li>
+										<li>Glass diodes</li>
+										<li>Axial resistors </li>
+										<li>PCB board</li>
+									</ul>
 									<div style="display: flex; justify-content: center; align-items: center;">
 										<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
 											<img src="images/Power-Amp/components.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="physical components" />
@@ -73,8 +86,13 @@
 											<img src="images/Power-Amp/Board.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="PCB Board" />
 										</div>
 									</div>
+									<p></p>
+									<div style="display: flex; justify-content: center; align-items: center;">
+										<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+											<img src="images/Power-Amp/finished.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="After Soldering" />
+										</div>
+									</div>
                                     <p>Finished Product: </p>
-                                    <a href="#" class="image"><img src="images/Power-Amp/finished.jpg" alt="" width="500" height="600"/></a>
 									<div style="display: flex; justify-content: center; align-items: center;">
 										<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
 											<img src="images/Power-Amp/good1.jpeg" style="width: 90%; height: auto; max-width: 100%;" alt="On TV" />
