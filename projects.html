@@ -206,7 +206,7 @@
 													<p>Inside the warp bubble, the ship would experience no acceleration or time dilation, drifting effortlessly in free fall along a geodesic. That's the charm from a relativistic standpoint. But there remain intimidating challenges: the theory requires enormous amounts of energy, generates potentially catastrophic tidal forces at the edge of the bubble, and may squeeze in-falling matter to killing densities.</p>
 													<p>Alcubierre's work does not provide a buildable engine—but it broadens our thinking and makes us realize that faster-than-light travel is within the bounds of general relativity, if we can get around its physical constraints.</p>
 													<a href="https://github.com/akid12345/Warp" class="special">Simulation Page</a>
-													<button id="collapseAllBtn" style="margin-bottom: 20px;">Shrink</button>
+													<button class="collapse-single" style="margin-top: 10px;">Shrink</button>
 												</div>									
 											</article>
 											<article>
@@ -276,6 +276,22 @@
 					});
 				});
 			</script>
+			<script>
+				document.querySelectorAll(".collapse-single").forEach(button => {
+					button.addEventListener("click", function () {
+						// Find the nearest .content parent and collapse it
+						const content = this.closest(".content");
+						const collapsibleButton = content.previousElementSibling;
+						
+						if (content && collapsibleButton) {
+							collapsibleButton.classList.remove("active");
+							content.style.maxHeight = null;
+						}
+					});
+				});
+			</script>
+
+			
 
 	</body>
 </html>
