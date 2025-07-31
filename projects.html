@@ -94,7 +94,75 @@
 									<section class="features">
 										<button type="button" class="collapsible">Power Amplifier for built-in speakers</button>
 												<div class="content">
-													<p>writing things</p>
+													<h3 class="major">Power Amplifier</h3>
+													<p>Today, almost every household has a TV and a built in sound system to output sound to create sound from all around the viewer. The main purpose of this project was to connect my TV to the speaker system without having to spend a ton of money, or buy something big and ugly. </p>
+													<div style="display: flex; justify-content: center; align-items: center;">
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/TV.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="TV Diagram" />
+															<p>TV Diagram</p>
+														</div>
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/Diagram1.png" style="width: 90%; height: auto; max-width: 100%;" alt="Digital Diagram" />
+															<p>Digital Diagram</p>
+														</div>
+													</div>
+													<p></p>
+													<p>I tried searching online for a device that can decode Digital Audio output from TV through Optical Toslink into 5.1 analog signals, and amplify these 6 channels so that the signals are strong enough to drive the passive speakers; however, that kind of device did not exist. So instead I found a Digital to 5.1 CH converter in Amazon:</p>
+													<div style="display: flex; justify-content: center; align-items: center;">
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/Amazon.png" style="width: 90%; height: auto; max-width: 100%;" alt="Converter" />
+															<p>Digital Converter</p>
+														</div>
+													</div>
+													<p>I built my design based off the following datasheet:</p>
+													<p>The principle behind an audio amplifier is to increase the input signal (power) so that it can drive a larger output load, which in this case is a speaker. Simplified down, an amplifier uses components like transistors or operational amplifiers to manipulate a large amoung of energy from a power supply from the inputs of a small signal</p>
+													<p>The amplifier works by taking in an input voltage, and outputing it to one input of a differential amplifier. The output of said amplifier is then scaled to a version of the original signal, determined by the gain set my external resistors, and is used to drive a load that requires more current and volatge than what the initial input signal can provide alone.</p>
+													<div style="display: flex; justify-content: center; align-items: center;">
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/datasheet.png" style="width: 90%; height: auto; max-width: 100%;" alt="Datasheet" />
+															<p>Datasheet</p>
+														</div>
+													</div>
+													<p>Components:
+														<ul>
+															<li>Film capacitors</li>
+															<li>2-Pin terminal blocks</li>
+															<li>Tantalum capacitors</li>
+															<li>Audio amplifier ICs (intergrated circuits)</li>
+															<li>Glass diodes</li>
+															<li>Axial resistors </li>
+															<li>PCB board</li>
+														</ul>
+													</p>
+													<div style="display: flex; justify-content: center; align-items: center;">
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/components.jpg" style="width: 60%; height: auto; max-width: 100%; rotate: 90deg;" alt="physical components" />
+															<p>Physical Components</p>
+														</div>
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/Board.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="PCB Board" />
+															<p>PCB Board</p>
+														</div>
+													</div>
+													<p></p>
+													<div style="display: flex; justify-content: center; align-items: center;">
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/finished.jpg" style="width: 60%; height: auto; max-width: 100%; rotate: 90deg;" alt="After Soldering" />
+															<p>After Soldering</p>
+														</div>
+													</div>
+													
+													<p>Finished Product: </p>
+													<div style="display: flex; justify-content: center; align-items: center;">
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/good1.jpeg" style="width: 90%; height: auto; max-width: 100%;" alt="On TV" />
+															<p>Connected to TV</p>
+														</div>
+														<div style="flex: 0 1 50%; text-align: center; display: flex; flex-direction: column; align-items: center;">
+															<img src="images/Power-Amp/good2.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="Inside Box" />
+															<p>Inside the finished box</p>
+														</div>
+													</div>
 												</div>
 										<!-- <article>
 											<a href="Power-Amp.html" class="image"><img src="images/Power-Amp/good2.jpg" alt="" /></a>
