@@ -64,6 +64,29 @@
 			background-color: rgba(37, 39, 47, 0.8);
 			}
 
+			#collapseAllBtn {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				border: none;
+				background-color: rgba(80, 85, 105, 0.9);
+				color: white;
+				font-size: 20px;
+				cursor: pointer;
+				z-index: 999;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				transition: background-color 0.3s ease;
+			}
+
+			#collapseAllBtn:hover {
+				background-color: rgba(233, 97, 7, 0.9);
+			}
+
 		</style>
 
 	</head>
@@ -246,6 +269,8 @@
 									</section>
 								</div>
 							</div>
+							<button id="collapseAllBtn" title="Collapse All">&#x2715;</button>
+
 									
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
@@ -290,6 +315,16 @@
 					});
 				});
 			</script>
+			<script>
+				document.getElementById("collapseAllBtn").addEventListener("click", function () {
+					document.querySelectorAll(".collapsible").forEach(btn => {
+						const content = btn.nextElementSibling;
+						btn.classList.remove("active");
+						content.style.maxHeight = null;
+					});
+				});
+			</script>
+
 
 			
 
