@@ -47,6 +47,22 @@
 			.content p, .content a {
 			margin: 12px 0;
 			}
+
+			#collapseAllBtn {
+			background-color: rgba(80, 85, 105, 0.9);
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: background-color 0.3s ease;
+			}
+
+			#collapseAllBtn:hover {
+			background-color: rgba(65, 70, 90, 0.9);
+			}
+
 		</style>
 
 	</head>
@@ -150,6 +166,7 @@
 															<img src="images/Power-Amp/good2.jpg" style="width: 90%; height: auto; max-width: 100%;" alt="Inside Box" />
 															<p>Inside the finished box</p>
 														</div>
+														<button id="collapseAllBtn" style="margin-bottom: 20px;">Collapse All</button>
 													</div>
 												</div>
 										<!-- <article>
@@ -246,7 +263,15 @@
 				});
 				});
 			</script>
-
+			<script>
+				document.getElementById("collapseAllBtn").addEventListener("click", function () {
+					document.querySelectorAll(".collapsible").forEach(btn => {
+						const content = btn.nextElementSibling;
+						btn.classList.remove("active");
+						content.style.maxHeight = null;
+					});
+				});
+			</script>
 
 	</body>
 </html>
