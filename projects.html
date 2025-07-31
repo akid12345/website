@@ -4,6 +4,41 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
+<style>
+.collapsible {
+  background-color: #444;
+  color: white;
+  cursor: pointer;
+  padding: 12px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: #222;
+  border-left: 2px solid #555;
+  border-radius: 4px;
+  color:white;
+}
+
+.content p, .content a {
+  margin: 12px 0;
+}
+</style>
 <html>
 	<head>
 		<title>Projects</title>
@@ -80,7 +115,7 @@
 											<article>
 												<a href="https://github.com/akid12345/Warp" class="image"><img src="images/WDrive.gif" alt="" /></a>
 												<h3 class="major">Warp Drive</h3>
-												<p>The Theory behind Faster than Light travel in Sci-Fi novels derived through Einstien's General Relativity</p>
+												<p>The Theory behind Faster than Light travel in Sci-Fi novels derived through Einstien's General Relativity</p>		
 												<button type="button" class="collapsible">More Information</button>
 												<div class="content">
 													<p>In 1994, physicist Miguel Alcubierre proposed a solution to Einstein's equations: a "warp drive" enabling faster-than-light (FTL) travel not by increasing the speed of a spacecraft, but by warping spacetime. His mathematical model describes a bubble of flat space surrounded by regions of extreme curvature—space expands behind the bubble and contracts ahead of it, propelling it forward. This is the Alcubierre metric:</p>
@@ -90,7 +125,7 @@
 													<p>Inside the warp bubble, the ship would experience no acceleration or time dilation, drifting effortlessly in free fall along a geodesic. That's the charm from a relativistic standpoint. But there remain intimidating challenges: the theory requires enormous amounts of energy, generates potentially catastrophic tidal forces at the edge of the bubble, and may squeeze in-falling matter to killing densities.</p>
 													<p>Alcubierre's work does not provide a buildable engine—but it broadens our thinking and makes us realize that faster-than-light travel is within the bounds of general relativity, if we can get around its physical constraints.</p>
 													<a href="https://github.com/akid12345/Warp" class="special">Simulation Page</a>
-												</div>												
+												</div>									
 											</article>
 											<article>
 												<a href="https://github.com/akid12345/battery" class="image"><img src="images/battery.gif" alt="" /></a>
@@ -127,6 +162,8 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="collapsible.js"></script>
+
 
 	</body>
 </html>
