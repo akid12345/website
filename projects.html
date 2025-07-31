@@ -190,7 +190,7 @@
 												</div>
 												<p>The prototype functions by creating a rotating force, as seen with the twisting of the paper clip in the prototype. This causes the rod to be pushed outwards (or inwards) because the rod is hooked to a fixed segment on the rotating disk in the middle. Once the rod is pushed outwards, it can then be used to push the lock on the inside of the car door, allowing it to be opened.</p>
 											</div>
-												<button class="collapse-single" style="margin-bottom: 20px;">Shrink</button>
+  											<button class="collapse-single">Shrink</button>
 										</div>
 										
 										<!-- <article>
@@ -278,38 +278,36 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>			
 			<script>
-				document.querySelectorAll(".collapsible").forEach(btn => {
-				btn.addEventListener("click", function () {
+				document.querySelectorAll(".collapsible").forEach(button => {
+					button.addEventListener("click", function () {
 					this.classList.toggle("active");
 					const content = this.nextElementSibling;
-					if (content.style.maxHeight) {
-					content.style.maxHeight = null;
-					} else {
-					content.style.maxHeight = content.scrollHeight + "px";
+					if (content && content.classList.contains("content")) {
+						if (content.style.maxHeight) {
+						content.style.maxHeight = null;
+						} else {
+						content.style.maxHeight = content.scrollHeight + "px";
+						}
 					}
+					});
 				});
+				document.querySelectorAll(".collapse-single").forEach(button => {
+					button.addEventListener("click", function () {
+					const content = this.closest(".content");
+					const collapsible = content?.previousElementSibling;
+					if (collapsible && content) {
+						collapsible.classList.remove("active");
+						content.style.maxHeight = null;
+					}
+					});
 				});
-			</script>
+			</script>		
 			<script>
 				document.getElementById("collapseAllBtn").addEventListener("click", function () {
 					document.querySelectorAll(".collapsible").forEach(btn => {
 						const content = btn.nextElementSibling;
 						btn.classList.remove("active");
 						content.style.maxHeight = null;
-					});
-				});
-			</script>
-			<script>
-				document.querySelectorAll(".collapse-single").forEach(button => {
-					button.addEventListener("click", function () {
-						// Find the nearest .content parent and collapse it
-						const content = this.closest(".content");
-						const collapsibleButton = content.previousElementSibling;
-						
-						if (content && collapsibleButton) {
-							collapsibleButton.classList.remove("active");
-							content.style.maxHeight = null;
-						}
 					});
 				});
 			</script>
