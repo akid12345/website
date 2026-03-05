@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lorenz Attractor</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #080612;
+      font-family: 'Courier New', monospace;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    canvas:active { cursor: grabbing; }
+
+    /* ---- Title overlay ---- */
+    #title {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      pointer-events: none;
+      color: #c8b8f0;
+    }
+    #title .label {
+      font-size: 11px;
+      letter-spacing: 6px;
+      opacity: 0.5;
+      margin-bottom: 4px;
+    }
+    #title h1 {
+      font-size: 28px;
+      font-weight: 200;
+      letter-spacing: 2px;
+      color: #e8deff;
+    }
+    #title .hint {
+      font-size: 11px;
+      opacity: 0.4;
+      margin-top: 4px;
+    }
+
+    /* ---- Equations overlay ---- */
+    #equations {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: rgba(160, 140, 200, 0.5);
+      font-size: 11px;
+      text-align: right;
+      pointer-events: none;
+      line-height: 1.8;
+    }
+
+    /* ---- Controls bar ---- */
+    #controls {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: center;
+    }
+
+    .panel {
+      background: rgba(20, 15, 40, 0.85);
+      border: 1px solid rgba(140, 100, 255, 0.15);
+      border-radius: 12px;
+      padding: 14px 18px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .slider-group span.lbl {
+      color: #a090d0;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .slider-group input[type="range"] {
+      width: 80px;
+      accent-color: #8b6ce0;
+      cursor: pointer;
+    }
+    .slider-group span.val {
+      color: #7a6aaa;
+      font-size: 10px;
+    }
+
+    .btn-group { display: flex; gap: 8px; margin-left: 4px; }
+
+    .btn {
+      background: rgba(120, 80, 220, 0.15);
+      border: 1px solid rgba(140, 100, 255, 0.25);
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: #b8a0e8;
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: rgba(120, 80, 220, 0.35); }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- Title -->
+<div id="title">
+  <div class="label">CHAOTIC SYSTEM</div>
+  <h1>Lorenz Attractor</h1>
+  <div class="hint">drag to rotate · scroll to zoom</div>
+</div>
+
+<!-- Live equations -->
+<div id="equations">
+  <div id="eq1"></div>
+  <div id="eq2"></div>
+  <div id="eq3"></div>
+</div>
+
+<!-- Controls -->
+<div id="controls">
+  <div class="panel">
+    <div class="slider-group">
+      <span class="lbl">σ</span>
+      <input type="range" id="sigma" min="1" max="30" step="0.5" value="10" />
+      <span class="val" id="sigmaVal">10.0</span>
+    </div>
+    <div class="slider-group">
+      <span class="lbl">ρ</span>
+      <input type="range" id="rho" min="1" max="50" step="0.5" value="28" />
+      <span class="val" id="rhoVal">28.0</span>
+    </div>
+    <div class="slider-group">
+      <span class="lbl">β</span>
+      <input type="range" id="beta" min="0.1" max="8" step="0.1" value="2.7" />
+      <span class="val" id="betaVal">2.7</span>
+    </div>
+    <div class="slider-group">
+      <span class="lbl">Speed</span>
+      <input type="range" id="speed" min="10" max="200" step="10" value="60" />
+      <span class="val" id="speedVal">60</span>
+    </div>
+    <div class="slider-group">
+      <span class="lbl">Color</span>
+      <input type="range" id="colorShift" min="0" max="360" step="5" value="0" />
+      <span class="val" id="colorVal">0</span>
+    </div>
+    <div class="btn-group">
+      <button class="btn" id="resetBtn">Reset View</button>
+      <button class="btn" id="restartBtn">Restart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Lorenz simulation ───────────────────────────────────────────
+const params = { sigma: 10, rho: 28, beta: 8 / 3 };
+
+function computePoints(n = 12000, dt = 0.005) {
+  const pts = [];
+  let x = 0.1, y = 0, z = 0;
+  for (let i = 0; i < n; i++) {
+    const dx = params.sigma * (y - x);
+    const dy = x * (params.rho - z) - y;
+    const dz = x * y - params.beta * z;
+    x += dx * dt;
+    y += dy * dt;
+    z += dz * dt;
+    pts.push([x, y, z]);
+  }
+  return pts;
+}
+
+// ─── Color helper ────────────────────────────────────────────────
+function hslToRgb(h, s, l) {
+  s /= 100; l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
+  return [f(0), f(8), f(4)];
+}
+
+function rgb(r, g, b, a) {
+  return `rgba(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)},${a})`;
+}
+
+// ─── State ───────────────────────────────────────────────────────
+let points = computePoints();
+const state = {
+  rotX: -0.5, rotY: 0, autoRotate: true,
+  trailLength: 0, growing: true,
+  zoom: 9, isDragging: false,
+  lastX: 0, lastY: 0,
+};
+
+let speed = 60;
+let colorShift = 0;
+
+// ─── Canvas setup ────────────────────────────────────────────────
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let W, H;
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener("resize", resize);
+
+// ─── 3‑D projection ─────────────────────────────────────────────
+function project(x, y, z) {
+  const cosY = Math.cos(state.rotY), sinY = Math.sin(state.rotY);
+  const cosX = Math.cos(state.rotX), sinX = Math.sin(state.rotX);
+  const x1 = x * cosY - z * sinY;
+  const z1 = x * sinY + z * cosY;
+  const y1 = y * cosX - z1 * sinX;
+  const z2 = y * sinX + z1 * cosX;
+  const s = 200 / (200 + z2) * state.zoom;
+  return { x: W / 2 + x1 * s, y: H / 2 - y1 * s, z: z2, s };
+}
+
+// ─── Draw loop ───────────────────────────────────────────────────
+function draw() {
+  const maxLen = points.length;
+
+  if (state.growing) {
+    state.trailLength = Math.min(state.trailLength + speed, maxLen);
+    if (state.trailLength >= maxLen) state.growing = false;
+  }
+  if (state.autoRotate) state.rotY += 0.003;
+
+  // Background
+  ctx.fillStyle = "#080612";
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle center glow
+  const grd = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.5);
+  grd.addColorStop(0, "rgba(40,20,80,0.12)");
+  grd.addColorStop(1, "transparent");
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  const len = Math.floor(state.trailLength);
+  if (len < 2) { requestAnimationFrame(draw); return; }
+
+  const cz = 25; // center offset on z
+
+  for (let i = 1; i < len; i++) {
+    const [px, py, pz] = points[i - 1];
+    const [nx, ny, nz] = points[i];
+    const p1 = project(px, py, pz - cz);
+    const p2 = project(nx, ny, nz - cz);
+
+    const t = i / maxLen;
+    const hue = (t * 300 + colorShift) % 360;
+    const alpha = 0.15 + 0.85 * (i / len);
+    const depth = Math.max(0.2, 1 - (p2.z + 50) / 120);
+    const lw = Math.max(0.5, 1.8 * p2.s / state.zoom * depth);
+
+    const [r, g, b] = hslToRgb(hue, 85, 55 * depth + 15);
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = rgb(r, g, b, alpha * depth);
+    ctx.lineWidth = lw;
+    ctx.stroke();
+
+    // Glow near head
+    if (i > len - 80) {
+      const ga = ((i - (len - 80)) / 80) * 0.5 * depth;
+      ctx.beginPath();
+      ctx.arc(p2.x, p2.y, 3 * p2.s / state.zoom, 0, Math.PI * 2);
+      ctx.fillStyle = rgb(r, g, b, ga);
+      ctx.fill();
+    }
+  }
+
+  // Head particle
+  if (state.growing && len > 0) {
+    const [hx, hy, hz] = points[len - 1];
+    const hp = project(hx, hy, hz - cz);
+    const hue = ((len / maxLen) * 300 + colorShift) % 360;
+    const [hr, hg, hb] = hslToRgb(hue, 90, 70);
+    for (let r = 12; r > 0; r -= 3) {
+      ctx.beginPath();
+      ctx.arc(hp.x, hp.y, r * hp.s / state.zoom, 0, Math.PI * 2);
+      ctx.fillStyle = rgb(hr, hg, hb, 0.12);
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.arc(hp.x, hp.y, 2.5 * hp.s / state.zoom, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fill();
+  }
+
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+// ─── Interaction ─────────────────────────────────────────────────
+canvas.addEventListener("pointerdown", e => {
+  state.isDragging = true;
+  state.autoRotate = false;
+  state.lastX = e.clientX;
+  state.lastY = e.clientY;
+});
+window.addEventListener("pointermove", e => {
+  if (!state.isDragging) return;
+  state.rotY += (e.clientX - state.lastX) * 0.005;
+  state.rotX += (e.clientY - state.lastY) * 0.005;
+  state.lastX = e.clientX;
+  state.lastY = e.clientY;
+});
+window.addEventListener("pointerup", () => { state.isDragging = false; });
+canvas.addEventListener("wheel", e => {
+  e.preventDefault();
+  state.zoom = Math.max(2, Math.min(25, state.zoom - e.deltaY * 0.005));
+}, { passive: false });
+
+// ─── UI wiring ───────────────────────────────────────────────────
+function updateEquations() {
+  document.getElementById("eq1").textContent = `dx/dt = ${params.sigma.toFixed(1)}(y − x)`;
+  document.getElementById("eq2").textContent = `dy/dt = x(${params.rho.toFixed(1)} − z) − y`;
+  document.getElementById("eq3").textContent = `dz/dt = xy − ${params.beta.toFixed(2)}z`;
+}
+updateEquations();
+
+function recompute() {
+  points = computePoints();
+  state.trailLength = 0;
+  state.growing = true;
+  updateEquations();
+}
+
+function wireSlider(id, valId, paramKey, fmt) {
+  const el = document.getElementById(id);
+  const valEl = document.getElementById(valId);
+  el.addEventListener("input", () => {
+    const v = parseFloat(el.value);
+    if (paramKey) { params[paramKey] = v; recompute(); }
+    else if (id === "speed") speed = v;
+    else if (id === "colorShift") colorShift = v;
+    valEl.textContent = fmt ? fmt(v) : v.toFixed(1);
+  });
+}
+
+wireSlider("sigma", "sigmaVal", "sigma");
+wireSlider("rho", "rhoVal", "rho");
+wireSlider("beta", "betaVal", "beta");
+wireSlider("speed", "speedVal", null, v => v.toFixed(0));
+wireSlider("colorShift", "colorVal", null, v => v.toFixed(0));
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  state.rotX = -0.5; state.rotY = 0; state.zoom = 9; state.autoRotate = true;
+});
+document.getElementById("restartBtn").addEventListener("click", () => {
+  state.trailLength = 0; state.growing = true;
+});
+</script>
+</body>
+</html>
