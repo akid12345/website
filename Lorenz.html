@@ -25,7 +25,6 @@
     }
     canvas:active { cursor: grabbing; }
 
-    /* ---- Title overlay ---- */
     #title {
       position: absolute;
       top: 20px;
@@ -51,7 +50,6 @@
       margin-top: 4px;
     }
 
-    /* ---- Equations overlay ---- */
     #equations {
       position: absolute;
       top: 20px;
@@ -63,7 +61,6 @@
       line-height: 1.8;
     }
 
-    /* ---- Controls bar ---- */
     #controls {
       position: absolute;
       bottom: 20px;
@@ -131,21 +128,18 @@
 
 <canvas id="canvas"></canvas>
 
-<!-- Title -->
 <div id="title">
   <div class="label">CHAOTIC SYSTEM</div>
   <h1>Lorenz Attractor</h1>
   <div class="hint">drag to rotate · scroll to zoom</div>
 </div>
 
-<!-- Live equations -->
 <div id="equations">
   <div id="eq1"></div>
   <div id="eq2"></div>
   <div id="eq3"></div>
 </div>
 
-<!-- Controls -->
 <div id="controls">
   <div class="panel">
     <div class="slider-group">
@@ -181,7 +175,6 @@
 </div>
 
 <script>
-// ─── Lorenz simulation ───────────────────────────────────────────
 const params = { sigma: 10, rho: 28, beta: 8 / 3 };
 
 function computePoints(n = 12000, dt = 0.005) {
@@ -199,7 +192,6 @@ function computePoints(n = 12000, dt = 0.005) {
   return pts;
 }
 
-// ─── Color helper ────────────────────────────────────────────────
 function hslToRgb(h, s, l) {
   s /= 100; l /= 100;
   const k = n => (n + h / 30) % 12;
@@ -212,7 +204,6 @@ function rgb(r, g, b, a) {
   return `rgba(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)},${a})`;
 }
 
-// ─── State ───────────────────────────────────────────────────────
 let points = computePoints();
 const state = {
   rotX: -0.5, rotY: 0, autoRotate: true,
@@ -224,7 +215,6 @@ const state = {
 let speed = 60;
 let colorShift = 0;
 
-// ─── Canvas setup ────────────────────────────────────────────────
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let W, H;
@@ -240,7 +230,6 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-// ─── 3‑D projection ─────────────────────────────────────────────
 function project(x, y, z) {
   const cosY = Math.cos(state.rotY), sinY = Math.sin(state.rotY);
   const cosX = Math.cos(state.rotX), sinX = Math.sin(state.rotX);
@@ -252,7 +241,6 @@ function project(x, y, z) {
   return { x: W / 2 + x1 * s, y: H / 2 - y1 * s, z: z2, s };
 }
 
-// ─── Draw loop ───────────────────────────────────────────────────
 function draw() {
   const maxLen = points.length;
 
@@ -262,11 +250,9 @@ function draw() {
   }
   if (state.autoRotate) state.rotY += 0.003;
 
-  // Background
   ctx.fillStyle = "#080612";
   ctx.fillRect(0, 0, W, H);
 
-  // Subtle center glow
   const grd = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.5);
   grd.addColorStop(0, "rgba(40,20,80,0.12)");
   grd.addColorStop(1, "transparent");
@@ -276,7 +262,7 @@ function draw() {
   const len = Math.floor(state.trailLength);
   if (len < 2) { requestAnimationFrame(draw); return; }
 
-  const cz = 25; // center offset on z
+  const cz = 25; 
 
   for (let i = 1; i < len; i++) {
     const [px, py, pz] = points[i - 1];
@@ -298,7 +284,6 @@ function draw() {
     ctx.lineWidth = lw;
     ctx.stroke();
 
-    // Glow near head
     if (i > len - 80) {
       const ga = ((i - (len - 80)) / 80) * 0.5 * depth;
       ctx.beginPath();
@@ -308,7 +293,6 @@ function draw() {
     }
   }
 
-  // Head particle
   if (state.growing && len > 0) {
     const [hx, hy, hz] = points[len - 1];
     const hp = project(hx, hy, hz - cz);
@@ -330,7 +314,6 @@ function draw() {
 }
 requestAnimationFrame(draw);
 
-// ─── Interaction ─────────────────────────────────────────────────
 canvas.addEventListener("pointerdown", e => {
   state.isDragging = true;
   state.autoRotate = false;
@@ -350,7 +333,6 @@ canvas.addEventListener("wheel", e => {
   state.zoom = Math.max(2, Math.min(25, state.zoom - e.deltaY * 0.005));
 }, { passive: false });
 
-// ─── UI wiring ───────────────────────────────────────────────────
 function updateEquations() {
   document.getElementById("eq1").textContent = `dx/dt = ${params.sigma.toFixed(1)}(y − x)`;
   document.getElementById("eq2").textContent = `dy/dt = x(${params.rho.toFixed(1)} − z) − y`;
